@@ -15,16 +15,23 @@ struct LandMarkRow: View{
             landmark.image
                 .resizable()
                 .frame(width: 50, height: 50)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
+                .shadow(color: Color.gray, radius: 2)
                 
             Text(landmark.name)
             
             Spacer()
+            
+            if landmark.isFavorite{
+                Image(systemName: "star.fill")
+                    .foregroundColor(Color.yellow)
+            }
         }
     }
 }
 
 struct LandMark_Preview: PreviewProvider{
     static var previews: some View{
-        LandMarkRow(landmark: landmarks[1]).previewLayout(.fixed(width: 400, height: 70))
+        LandMarkRow(landmark: MarkCore().markState.landmarks[0])
     }
 }

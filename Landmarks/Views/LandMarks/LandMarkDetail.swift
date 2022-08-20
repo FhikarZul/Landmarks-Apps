@@ -6,23 +6,37 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct LandMarkDetail: View{
+    @EnvironmentObject var markCore: MarkCore
+    
     let landMark: LandMark
+    
+    var landmarkIndex: Int{
+        markCore.markState.landmarks.firstIndex(where: {$0.id == landMark.id})!
+    }
     
     var body: some View{
         ScrollView{
             VStack{
-                MapView()
+                MapView(coordinate: landMark.locationCoordinate)
                     .frame(height: 300)
                 
-                CircleImage()
+                CircleImage(image: landMark.image)
                     .offset(y: -130)
                     .padding(.bottom, -130)
                 
                 VStack(alignment: .leading){
-                    Text(landMark.name)
-                        .font(.title)
+                    HStack{
+                        Text(landMark.name)
+                            .font(.title)
+                        
+                        FavoriteButton(
+                            isSet: markCore.markState.landmarks[landmarkIndex].isFavorite,
+                            onTap: { markCore.onEvent(markEvent: .FavoriteEventButtonEvent(index: landmarkIndex)) }
+                        )
+                    }
                     HStack{
                         Text(landMark.park)
                            
@@ -45,12 +59,15 @@ struct LandMarkDetail: View{
                 }
                 .padding()
             }
+            .navigationTitle(landMark.name)
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
 
 struct LandMarkDetail_Preview: PreviewProvider{
     static var previews: some View{
-        LandMarkDetail(landMark: landmarks[0])
+        LandMarkDetail(landMark: MarkCore().markState.landmarks[0])
+            .environmentObject(MarkCore())
     }
 }
