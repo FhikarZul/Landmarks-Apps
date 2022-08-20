@@ -12,7 +12,7 @@ struct Hike: Codable, Hashable, Identifiable{
     var name: String
     var distance: Double
     var difficulty: Int
-    var observation: [Observation]
+    var observations: [Observation]
     
     static var formatter = LengthFormatter()
     
